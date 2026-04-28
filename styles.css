@@ -41,6 +41,9 @@ body {
   line-height: 1.72;
   letter-spacing: 0;
   overflow-x: hidden;
+  line-break: strict;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 body::before,
