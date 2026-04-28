@@ -54,7 +54,7 @@ const caseStudies = {
       "成長戦略を、勝ちモックアップ、勝ち訴求、商品ページ改善の順序に分解",
     ],
     learning:
-      "ブランドづくりでは、美しい思想よりも現在地の可視化が重要だと学びました。何が決定済みで、何が仮説で、次に何を検証するのかを分けることで、闇雲な努力ではなく方向を持った実行に変えられます。",
+      "きれいな思想を持っていても、何が決まっていて何が仮説かを整理しないと前に進めません。Moftailを通して、現在地を見えるようにすることが動き方を変えると気づきました。",
   },
   anchor: {
     kicker: "Case Study 02",
@@ -65,7 +65,7 @@ const caseStudies = {
     role:
       "家族の実体験を起点に、問題定義、UX設計、SwiftUI実装方針、提出文章までを自分で統合。",
     decision:
-      "緊急時に機能を増やすのではなく、事前準備とShield表示に絞り、声が出ない瞬間の認知負荷を最小化しました。",
+      "緊急時に機能を増やしても使えません。事前のShield表示に絞り、声が出ない瞬間に判断させないようにしました。",
     output:
       "Offline-first QR、Shield、Shortcuts / App Intents、高コントラストUI、提出用の英日ドキュメントを含むMVPを作成。",
     tools: ["SwiftUI", "Xcode", "ChatGPT", "Claude", "UI Design"],
@@ -87,7 +87,7 @@ const caseStudies = {
       "提出文章では、問題、対象ユーザー、アクセシビリティ、使用技術を英日で整理",
     ],
     learning:
-      "Anchorで学んだのは、アクセシビリティは追加機能ではなく、体験の中心そのものだということです。AIは選択肢を増やせますが、危機時のUIでは増やすより削る判断が重要でした。",
+      "機能を足すより削る方が難しいと、Anchorを作って実感しました。アクセシビリティは後から乗せるものではなく、最初から設計の中心に置くものです。",
   },
   shopify: {
     kicker: "Case Study 03",
@@ -105,7 +105,7 @@ const caseStudies = {
     summary:
       "商品ページの価格やサイズ選択の挙動を調査し、再現手順、期待値、実際の挙動、原因仮説を共有可能な資料に整理しました。",
     problem:
-      "最初はプラットフォーム側の問題に見えた挙動も、テーマのLiquidやフロントエンド実装に関係する可能性がありました。感覚的な問い合わせではなく、第三者が検証できる形にする必要がありました。",
+      "最初はプラットフォームの問題に見えても、テーマのLiquidやフロントエンド実装が原因のことがあります。感覚で問い合わせると相手も動けないので、再現できる形にする必要がありました。",
     process: [
       "どの商品ページで発生するかを確認",
       "サイズ選択、価格表示、更新タイミングを観察",
@@ -118,7 +118,7 @@ const caseStudies = {
       "外部チームへ共有しやすい文面へ変換",
     ],
     learning:
-      "技術的な問題は、原因をすぐに決めつけず、観察結果と仮説を分けて扱うことが大切だと学びました。",
+      "「なんか変」を「どの条件で、どう変か」に言い直すだけで、技術的な問題は解像度が上がります。",
   },
   zen: {
     kicker: "Case Study 04",
@@ -149,7 +149,7 @@ const caseStudies = {
       "短いキャプション案の作成とトーン調整",
     ],
     learning:
-      "AIで量を出すことはできますが、ブランドの一貫性を保つには、人間側が選ぶ基準を持つ必要があると学びました。",
+      "AIは量を出してくれますが、何を選んで何を捨てるかは自分が決めないとブランドはぶれます。",
   },
 };
 
@@ -171,11 +171,21 @@ const fields = {
   learning: document.querySelector("#dialog-learning"),
 };
 
+// Wrap the last character + trailing CJK punctuation in a white-space:nowrap
+// span so punctuation can never be stranded alone on the final line.
+function noOrphan(text) {
+  if (!text) return text;
+  const esc = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return esc.replace(/(.)([。、！？…]+)$/u, (_, c, p) =>
+    `<span style="white-space:nowrap">${c}${p}</span>`
+  );
+}
+
 function renderList(target, items) {
   target.innerHTML = "";
   for (const item of items) {
     const li = document.createElement("li");
-    li.textContent = item;
+    li.innerHTML = noOrphan(item);
     target.append(li);
   }
 }
@@ -198,12 +208,12 @@ function openCase(key) {
   fields.image.src = study.image || "";
   fields.image.alt = study.imageAlt || `${study.title} visual`;
   fields.title.textContent = study.title;
-  fields.summary.textContent = study.summary;
-  fields.role.textContent = study.role;
-  fields.decision.textContent = study.decision;
-  fields.output.textContent = study.output;
-  fields.problem.textContent = study.problem;
-  fields.learning.textContent = study.learning;
+  fields.summary.innerHTML = noOrphan(study.summary);
+  fields.role.innerHTML = noOrphan(study.role);
+  fields.decision.innerHTML = noOrphan(study.decision);
+  fields.output.innerHTML = noOrphan(study.output);
+  fields.problem.innerHTML = noOrphan(study.problem);
+  fields.learning.innerHTML = noOrphan(study.learning);
   renderTags(fields.tools, study.tools || []);
   renderList(fields.process, study.process);
   renderList(fields.ai, study.ai);
