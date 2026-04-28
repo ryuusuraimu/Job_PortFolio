@@ -35,6 +35,7 @@ const caseStudies = {
       "商品数を広げる前に、Still Fox TeeをHero Productとして固定し、思想を検証可能な購入導線へ落とすことを優先しました。",
     output:
       "Balance of Lifeを中心にしたBrand OS、Hero Product戦略、PDP改善観点、365 Zen Moments、広告・SNS運用メモを整備。",
+    tools: ["Shopify", "Printify", "Meta Ads", "Claude", "ChatGPT", "Markdown"],
     summary:
       "服を売るブランドではなく、Balance of Lifeという状態価値を日常に届けるPODブランド。Still Fox Teeを入口に、Shopify、広告、SNS、商品ページを一つの世界観として設計しています。",
     problem:
@@ -62,15 +63,16 @@ const caseStudies = {
     imageAlt: "Anchor app screens",
     imageFit: "cover-left",
     role:
-      "母のための課題から出発し、問題定義、UX設計、SwiftUI実装方針、提出文章までを自分で統合。",
+      "家族の実体験を起点に、問題定義、UX設計、SwiftUI実装方針、提出文章までを自分で統合。",
     decision:
       "緊急時に機能を増やすのではなく、事前準備とShield表示に絞り、声が出ない瞬間の認知負荷を最小化しました。",
     output:
       "Offline-first QR、Shield、Shortcuts / App Intents、高コントラストUI、提出用の英日ドキュメントを含むMVPを作成。",
+    tools: ["SwiftUI", "Xcode", "ChatGPT", "Claude", "UI Design"],
     summary:
-      "パニック時に言葉が出なくなる瞬間を想定し、声の代わりに状況と助け方を伝えるiOSアプリ。母のために作り始めた、オフライン完結の支援依頼カードです。",
+      "家族のパニック時の実体験をもとに、声が出せない場面でも状況と助け方を伝えられる、オフライン完結の支援依頼カードとして設計しました。",
     problem:
-      "パニック発作、感覚過負荷、PTSDトリガーなどでは、読む、話す、判断する能力がほぼゼロに近くなることがあります。本人は固まり、周囲の人も何をすべきか分からない。この沈黙を、会話なしで読める指示へ変える必要がありました。",
+      "パニック発作や感覚過負荷が起きる場面では、読む、話す、判断する能力がほぼゼロに近くなることがあります。本人は固まり、周囲の人も何をすべきか分からない。この沈黙を、会話なしで読める指示へ変える必要がありました。",
     process: [
       "North Starを「Prepareを日常の安心にし、Crisisで迷いなくShieldを展開できる」に設定",
       "Situation / Please Do / Please Don'tを事前に登録し、危機時はShieldとして即表示",
@@ -99,6 +101,7 @@ const caseStudies = {
       "感覚的に問い合わせるのではなく、期待値、実際の挙動、影響範囲を分けて第三者が検証できる形にしました。",
     output:
       "Shopify標準挙動とテーマ固有挙動を切り分けた共有ドキュメントと、外部チームに伝わる改善提案を作成。",
+    tools: ["Shopify", "Liquid", "JavaScript", "Claude", "Markdown"],
     summary:
       "商品ページの価格やサイズ選択の挙動を調査し、再現手順、期待値、実際の挙動、原因仮説を共有可能な資料に整理しました。",
     problem:
@@ -129,6 +132,7 @@ const caseStudies = {
       "売り込み投稿ではなく、calm / stillness / balanceを静かに反復するブランド資産として扱いました。",
     output:
       "Image + Short Zen line + MOFTAILの投稿構造、モチーフ集、キャプション方針、転用可能なコンテンツ基盤を作成。",
+    tools: ["Image Generation", "ChatGPT", "Claude", "Markdown", "SNS Planning"],
     summary:
       "Moftailのcalm、stillness、balance、awareness、natureを毎日の投稿として蓄積するブランド・コンテンツエンジンです。",
     problem:
@@ -160,6 +164,7 @@ const fields = {
   role: document.querySelector("#dialog-role"),
   decision: document.querySelector("#dialog-decision"),
   output: document.querySelector("#dialog-output"),
+  tools: document.querySelector("#dialog-tools"),
   problem: document.querySelector("#dialog-problem"),
   process: document.querySelector("#dialog-process"),
   ai: document.querySelector("#dialog-ai"),
@@ -172,6 +177,15 @@ function renderList(target, items) {
     const li = document.createElement("li");
     li.textContent = item;
     target.append(li);
+  }
+}
+
+function renderTags(target, items) {
+  target.innerHTML = "";
+  for (const item of items) {
+    const tag = document.createElement("span");
+    tag.textContent = item;
+    target.append(tag);
   }
 }
 
@@ -190,6 +204,7 @@ function openCase(key) {
   fields.output.textContent = study.output;
   fields.problem.textContent = study.problem;
   fields.learning.textContent = study.learning;
+  renderTags(fields.tools, study.tools || []);
   renderList(fields.process, study.process);
   renderList(fields.ai, study.ai);
   dialog.showModal();
