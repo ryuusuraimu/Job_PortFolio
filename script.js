@@ -199,6 +199,36 @@ document.querySelectorAll("[data-case]").forEach((card) => {
   card.addEventListener("click", () => openCase(card.dataset.case));
 });
 
+document.querySelectorAll("[data-copy-email]").forEach((button) => {
+  button.addEventListener("click", async () => {
+    const email = button.dataset.copyEmail;
+    const originalText = button.textContent;
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(email);
+      } else {
+        const fallback = document.createElement("textarea");
+        fallback.value = email;
+        fallback.setAttribute("readonly", "");
+        fallback.style.position = "fixed";
+        fallback.style.opacity = "0";
+        document.body.append(fallback);
+        fallback.select();
+        document.execCommand("copy");
+        fallback.remove();
+      }
+
+      button.textContent = "Copied";
+      window.setTimeout(() => {
+        button.textContent = originalText;
+      }, 1800);
+    } catch {
+      button.textContent = email;
+    }
+  });
+});
+
 closeButton.addEventListener("click", () => dialog.close());
 
 dialog.addEventListener("click", (event) => {

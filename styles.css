@@ -773,8 +773,29 @@ h3 {
   line-break: strict;
 }
 
+.contact-email {
+  margin: 28px auto 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.6vw, 1.18rem);
+  font-weight: 700;
+}
+
+.contact-email a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: rgba(26, 115, 232, 0.3);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.contact-email a:hover {
+  color: var(--blue);
+  text-decoration-color: rgba(26, 115, 232, 0.72);
+}
+
 .contact-section .hero-actions {
   justify-content: center;
+  margin-top: 30px;
 }
 
 .case-dialog {
